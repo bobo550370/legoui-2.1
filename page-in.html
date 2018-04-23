@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="author" content="bobo">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="css/legoui.css">
+    <link rel="stylesheet" href="css/demo-scrollbar.css">
+
+    <style>
+        body {
+            background-color: #F5F5F5;
+        }
+
+        .lo-grids {
+            height: 300px;
+        }
+
+        .lo-popup__overlay,
+        .lo-popup__container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .lo-popup__overlay {
+            background-color: #000;
+            opacity: .3;
+            -webkit-transition: opacity .3s;
+            transition: opacity .3s;
+        }
+
+        .lo-popup__container {
+            display: none;
+        }
+
+        .lo-popup__container.lo-popup__container--visible {
+            display: block;
+        }
+
+        .lo-popup__container .lo-cells {
+            margin: 0;
+            text-align: left;
+        }
+
+        .lo-popup__modal {
+            width: 100%;
+            position: absolute;
+            z-index: 100;
+            bottom: 0;
+            border-radius: 0;
+            opacity: 0.6;
+            color: #3d4145;
+            -webkit-transition-duration: .3s;
+            transition-duration: .3s;
+            height: 100%;
+            background: #F5F5F5;
+            -webkit-transform: translate3d(0, 100%, 0);
+            transform: translate3d(0, 100%, 0);
+            -webkit-transition-property: opacity, -webkit-transform;
+            transition-property: opacity, -webkit-transform;
+            transition-property: transform, opacity;
+            transition-property: transform, opacity, -webkit-transform;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .popup-bottom .lo-popup__modal {
+            height: auto;
+        }
+
+        .lo-popup__modal .toolbar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .lo-popup__modal .modal-content {
+            height: 100%;
+            padding-top: 2.2rem;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+
+        .lo-popup__container--visible .lo-popup-overlay {
+            opacity: 1;
+        }
+
+        .lo-popup__container--visible .lo-popup__modal {
+            opacity: 1;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .lo-article {
+            padding: 20px 15px;
+            font-size: 15px;
+        }
+
+        .lo-article * {
+            max-width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .lo-article h1 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: .9em;
+        }
+
+        .lo-article section {
+            margin-bottom: 1.5em;
+        }
+
+        .lo-article h2,
+        .lo-article h3 {
+            font-weight: 400;
+            margin-bottom: .34em;
+        }
+
+        lo.min.css:5 .lo-article h2 {
+            font-size: 16px;
+        }
+
+        .lo-article section {
+            margin-bottom: 1.5em;
+        }
+
+        .lo-article h3 {
+            font-size: 15px;
+        }
+
+        lo.min.css:5 .lo-article h2,
+        .lo-article h3 {
+            font-weight: 400;
+            margin-bottom: .34em;
+        }
+
+        .lo-article p {
+            margin: 0 0 .8em;
+            line-height: 1.6;
+        }
+        
+        
+/*        */
+        .lo-square {
+            display: flex;
+            align-items: center;
+        }
+        .lo-square label {
+            display: flex;
+            align-items: center;
+            margin: 0 1.2rem 0 0;
+        }
+        .lo-square span {margin: 0 0 0 .4rem;}
+    </style>
+
+
+</head>
+
+<body ontouchstart>
+
+
+<!--
+    <div class="demo-title">
+        <div class="demo-title-en">Popup</div>
+        <div class="demo-title-cn">弹出层</div>
+    </div>
+-->
+    <div class="lo-h-44"></div>
+    
+
+
+    <div class="content lo-gutter">
+        <a href="javascript:;" class="lo-btn lo-b-4 lo-c-5 open-popup" data-target="#full">显示全屏(默认)Popup</a>
+        
+        <div class="lo-h-16"></div>
+        
+        <a href="javascript:;" class="lo-btn lo-b-1 lo-c-5 open-popup" data-target="#half">显示底部的Popup</a>
+        
+        <div class="lo-h-16"></div>
+        
+        <a href="javascript:;" class="lo-btn lo-b-1 lo-c-5" data-target="#half" id="showToast">Toast</a>
+        
+        <div class="lo-h-16"></div>
+        
+        <a href="javascript:;" class="lo-btn lo-b-1 lo-c-5" id="showIOSDialog1">点击显示弹窗</a>
+<!--        <a href="javascript:;" class="lo-btn lo-b-1 lo-c-5" data-target="#half" id="showToast">点击显示弹窗</a>-->
+    </div>
+
+    <!--  显示全屏(默认)Popup  -->
+    <div id="full" class='lo-popup__container'>
+        <div class="lo-popup__overlay"></div>
+        <div class="lo-popup__modal">
+
+            <header class="lo-navbar lo-b-5">
+                <a></a>
+                <a href="javascript:;" class="close-popup">关闭</a>
+                <div class="lo-navbar-title">服务申请</div>
+            </header>
+
+            <div class="lo-h-44"></div>
+
+            <article class="lo-article">
+                <h1>大标题</h1>
+                <section>
+                    <h2 class="title">章标题</h2>
+                    <section>
+                        <h3>1.1 节标题</h3>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+
+                        <img src="./images/pic_article.png" alt="">
+                        <div class="lo-h-16"></div>
+                        <img src="./images/pic_article.png" alt="">
+
+                    </section>
+                    <section>
+                        <h3>1.2 节标题</h3>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </section>
+                </section>
+            </article>
+        </div>
+    </div>
+
+    <!--  显示底部的Popup  -->
+    <div id="half" class='lo-popup__container popup-bottom'>
+        <div class="lo-popup__overlay"></div>
+        <div class="lo-popup__modal">
+            <header class="lo-navbar lo-b-5">
+                <a></a>
+                <a href="javascript:;" class="close-popup">关闭</a>
+                <div class="lo-navbar-title">服务申请</div>
+            </header>
+            <div class="modal-content">
+                <div class="lo-grids">
+                    <!-- 内容 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  toast  -->
+    <div id="toast" style="display: none;">
+        <div class="lo-toast">已完成</div>
+    </div>
+    
+    
+    <!--  dialog  -->
+    <div id="dialogs">
+        <div class="js_dialog" id="iosDialog1" style="display: none;">
+            <div class="lo-mask"></div>
+            <div class="lo-dialog">
+                <div class="lo-h-32"></div>
+                <div class="lo-c-3 lo-f14 lo-gutter">
+                    您选择的发票为个人/非企业单位抬头，如需报销，请选择企业抬头发票。
+                    <div class="lo-h-16"></div>
+                </div>
+                <div class="lo-h-8"></div>
+                
+                <div class="lo-dialog__ft">
+                    <a href="javascript:;" class="lo-dialog-btn lo-b-6">取消</a>
+                    <a href="javascript:;" class="lo-dialog-btn lo-b-1 lo-c-5">确认提交</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    
+    
+
+    
+    <!--  script  -->
+    <script src="js/zepto.min.js"></script>
+    <script src="js/icheck.min.js"></script>
+<!--
+    <script>
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    </script>
+-->
+    
+    <script src="js/lego-0.1.0.js"></script>
+    <script>
+        
+        // popup
+        $(document).on("open", ".lo-popup-modal", function() {
+            console.log("open popup");
+        }).on("close", ".lo-popup-modal", function() {
+            console.log("close popup");
+        });
+          
+        // toast
+        $(function() {
+            var $toast = $('#toast');
+            $('#showToast').on('click', function() {
+                if ($toast.css('display') != 'none') return;
+
+                $toast.fadeIn(100);
+                setTimeout(function() {
+                    $toast.fadeOut(100);
+                }, 1500);
+            });
+        });
+          
+        //Dialog
+        $(function() {
+            var $iosDialog1 = $('#iosDialog1');
+            $('#dialogs').on('click', '.lo-dialog-btn', function() {
+                $(this).parents('.js_dialog').fadeOut(200);
+            });
+            $('#showIOSDialog1').on('click', function() {
+                $iosDialog1.fadeIn(200);
+            });
+        });
+    </script>
+</body>
+</html>
